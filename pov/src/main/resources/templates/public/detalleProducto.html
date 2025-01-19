@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Producto</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+
+    <nav th:replace="~{public/layout/header::header}"></nav>
+    <div class="container mt-5">
+        <div class="row">
+
+            <div class="col-md-6 mb-4">
+                <img th:src="${producto.imagen}"alt="Product" class="img-fluid rounded mb-3 product-image border" id="mainImage">
+            </div>
+    
+            <div class="col-md-6">
+                <h2 class="mb-3" th:text="${producto.nombreProducto}"></h2>
+                <div class="mb-3">
+                    <span class="text-primary fw-bold" th:text="${'$' + producto.precioUnitario}">Precio</span>
+                </div>
+                <p class="mb-4" th:text="${producto.descripcion}">Descripción del Producto</p>  
+
+                <form th:action="@{/carrito/agregar}" method="post">
+                    <input type="hidden" name="idProducto" th:value="${producto.idProducto}" />
+                
+                    <div class="mb-4">
+                        <label for="quantity" class="form-label">Cantidad:</label>
+                        <input type="number" name="cantidad" class="form-control" id="quantity" value="1" min="1" style="width: 80px;">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg mb-3 me-2">
+                        <i class="bi bi-cart-plus"></i> Añadir al Carrito
+                    </button>
+                </form> 
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+        <h3>Otros Productos</h3>
+        <div class="row">
+            <div class="col-md-3 mb-4" th:each="producto : ${otrosProductos}">
+                <div class="card w-100 h-100">
+                    <img th:src="${producto.imagen}" class="card-img-top" alt="Producto">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${producto.nombreProducto}">Nombre del Producto</h5>
+                        <p class="card-text text-primary fw-bold" th:text="${'$' + producto.precioUnitario}">Precio</p>
+                        <a th:href="${'/productos/' + producto.idProducto}" class="btn btn-primary">Ver Detalles</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="public/layout/footer::footer"></footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

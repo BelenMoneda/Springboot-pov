@@ -1,0 +1,65 @@
+.fondo_nav {
+    background-color: #212529;
+}
+
+.logo {
+    width: 120px;
+    height: auto;
+}
+
+.nav-item {
+    transition: all 0.3s;
+}
+
+.nav-item:hover {
+    color: white;
+}
+
+.hero_style {
+    background-color: #0000005e;
+    height: 90vh; 
+    position: relative; 
+    overflow: hidden;
+}
+
+.product-image {
+    max-height: 400px;
+    object-fit: cover;
+}
+
+.thumbnail {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+}
+
+.thumbnail:hover, .thumbnail.active {
+    opacity: 1;
+}
+
+.producto-descripcion {
+    height: 20px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+}
+
+.imagen-producto {
+    height: 50%;
+    width: 100%;
+    object-fit: contain;
+}
+
+.añadir-carrito {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.añadir-carrito > * {
+    width: 40% !important;
+}

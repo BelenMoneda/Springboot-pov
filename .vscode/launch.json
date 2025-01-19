@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-PovApplication<pov>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.example.pov.pov.PovApplication",
+            "projectName": "pov",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

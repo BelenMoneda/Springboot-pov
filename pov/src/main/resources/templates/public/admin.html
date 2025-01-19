@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrar Productos</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+    <nav th:replace="~{public/layout/header::header}"></nav>
+    <div class="container mt-5">
+        <h1 class="text-center">Administrar Productos</h1>
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <h2>Añadir Producto</h2>
+                <form id="addProductForm" th:action="@{/admin/añadir}" method="post">
+                    <div class="form-group">
+                        <label for="nombreProducto">Nombre del Producto</label>
+                        <input type="text" class="form-control" id="nombreProducto" name="nombreProducto" placeholder="Nombre del Producto" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="marca">Marca</label>
+                        <input type="text" class="form-control" id="marca" name="marca" placeholder="Marca" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="modelo">Modelo</label>
+                        <input type="text" class="form-control" id="modelo" name="modelo" placeholder="Modelo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="descripcion">Descripción</label>
+                        <textarea class="form-control" id="descripcion" name="descripcion" placeholder="Descripción" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="precioUnitario">Precio Unitario</label>
+                        <input type="number" step="0.01" class="form-control" id="precioUnitario" name="precioUnitario" placeholder="Precio Unitario" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="stock">Stock</label>
+                        <input type="number" class="form-control" id="stock" name="stock" placeholder="Stock" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="imagen">URL de Imagen</label>
+                        <input type="text" class="form-control" id="imagen" name="imagen" placeholder="URL de Imagen">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Añadir</button>
+                </form>                
+            </div>
+            <div class="col-md-6">
+                <h2>Lista de Productos</h2>
+                <ul class="list-group" id="productList">
+                    <li th:each="producto : ${productos}" class="list-group-item d-flex justify-content-between align-items-center">
+                        <p th:text="${producto.getNombreProducto()}"></p>
+                        <form th:action="${'/admin/borrar/' + producto.getIdProducto()}" method="post" class="d-inline">
+                            <input type="hidden" name="productId" th:value="${producto.getIdProducto()}" />
+                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

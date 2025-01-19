@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito - POV Cámaras</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/estilos.css">
+</head>
+
+<body>
+    <nav th:replace="~{public/layout/header::header}"></nav>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Carrito de Compras</h1>
+
+        <div th:if="${carrito == null || tamano == 0}" class="alert alert-warning">
+            <p class="text-center">Tu carrito está vacío. <a href="/productos">Explora productos</a>.</p>
+        </div>
+
+        <div th:if="${carrito != null && tamano > 0}">
+            <table class="table table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>Subtotal</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="itemCarrito : ${carrito.getItems()}">
+                        <td th:text="${itemCarrito.getProducto().nombreProducto}">Nombre del Producto</td>
+                        <td>
+                            <form th:action="${'/carrito/actualizar/' + itemCarrito.getProducto().getIdProducto()}" method="post" class="d-flex">
+                                <input type="hidden" name="idProducto" th:value="${itemCarrito.producto.idProducto}" />
+                                <input type="number" name="cantidad" class="form-control me-2" th:value="${itemCarrito.cantidad}" min="1" />
+                                <button type="submit" class="btn btn-primary">Actualizar</button>
+                            </form>
+                        </td>
+                        <td th:text="${itemCarrito.getProducto().precioUnitario}">0.00</td>
+                        <td th:text="${itemCarrito.cantidad * itemCarrito.getProducto().precioUnitario}">0.00</td>
+                        <td>
+                            <form th:action="@{/carrito/eliminar}" method="post">
+                                <input type="hidden" name="idProducto" th:value="${itemCarrito.getProducto().idProducto}" />
+                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <form th:action="@{/carrito/finalizar}" method="get">
+                <button type="submit" class="btn btn-secondary">Relizar pedido</button>
+            </form>
+            
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-3 mt-5 position-fixed bottom-0 w-100">
+        <p class="mb-0">© 2025 POV Cámaras. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
