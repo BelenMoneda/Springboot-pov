@@ -24,7 +24,7 @@
                 </div>
                 <p class="mb-4" th:text="${producto.descripcion}">Descripción del Producto</p>  
 
-                <form th:action="@{/carrito/agregar}" method="post">
+                <form th:action="${'/carrito/agregar/' + producto.idProducto}" method="post">
                     <input type="hidden" name="idProducto" th:value="${producto.idProducto}" />
                 
                     <div class="mb-4">
