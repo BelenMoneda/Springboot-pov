@@ -73,11 +73,10 @@ public class InicioController {
             Usuario usuario = usuarioService.buscarUsuarioEmail(nombreUsuario);
             Carrito carrito = carritoService.obtenerCarritoDeUsuarioActivo(usuario);
 
-            if(carrito == null) {
-                carrito = new Carrito(usuario);
-                carritoService.guardarCarrito(carrito);
+            if(carrito.getItems().size() > 0) {
+                System.out.println("Carrito: " + carrito.getItems().get(0).getProducto().getNombreProducto());
             }
-
+            
             session.setAttribute("carrito", carrito);
             model.addAttribute("carrito", carrito);
             model.addAttribute("tamano", carritoService.obtenerTamañoCarrito(carrito));
@@ -86,18 +85,6 @@ public class InicioController {
         List<Producto> productos = productoService.obtenerTodosLosProductos();
         model.addAttribute("productos", productos);
         return "public/index";
-    }
-
-    @GetMapping("/irCarrito")
-    public String redirigirAlCarrito(Model model, HttpSession session) {
-        Carrito carrito = (Carrito) session.getAttribute("carrito");
-        if (carrito == null) {
-            carrito = new Carrito();
-            session.setAttribute("carrito", carrito);
-        }
-
-        model.addAttribute("carrito", carrito);
-        return "public/carrito"; // Cambia a la vista correspondiente de tu carrito
     }
     
 }

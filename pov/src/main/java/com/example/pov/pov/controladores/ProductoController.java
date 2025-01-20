@@ -1,8 +1,10 @@
 package com.example.pov.pov.controladores;
 import com.example.pov.pov.entidades.Carrito;
+import com.example.pov.pov.entidades.Categoria;
 import com.example.pov.pov.entidades.Producto;
 import com.example.pov.pov.entidades.Usuario;
 import com.example.pov.pov.servicios.CarritoService;
+import com.example.pov.pov.servicios.CategoriaService;
 import com.example.pov.pov.servicios.ProductoService;
 import com.example.pov.pov.servicios.UsuarioService;
 
@@ -32,14 +34,43 @@ public class ProductoController {
     @Autowired
     private CarritoService carritoService;
 
+    @Autowired
+    private CategoriaService categoriaService;
+
     @GetMapping
-    public String inicio(Model model,
-                         @RequestParam(value = "nombre", required = false) String nombre,
-                         @RequestParam(value = "precioMin", required = false) Double precioMin,
-                         @RequestParam(value = "precioMax", required = false) Double precioMax,
-                         @RequestParam(value = "categoria", required = false) String categoria) {
+    public String inicio(
+            Model model,
+            @RequestParam(value = "nombre", required = false) String nombre,
+            @RequestParam(value = "precioMin", required = false) Double precioMin,
+            @RequestParam(value = "precioMax", required = false) Double precioMax,
+            @RequestParam(value = "categoria", required = false) String categoria,
+            HttpSession session
+        ) {
+
+        System.out.println("Categoria: " + categoria);
+
+        List<Categoria> categorias = categoriaService.obtenerTodas(); 
         List<Producto> productos = productoService.obtenerProductosFiltrados(nombre, precioMin, precioMax, categoria);
+        model.addAttribute("categorias", categorias);
         model.addAttribute("productos", productos);
+
+        String nombreUsuario = usuarioService.getNombreUsuario();
+            
+        if(nombreUsuario != null) {
+            Usuario usuario = usuarioService.buscarUsuarioEmail(nombreUsuario);
+            Carrito carrito = carritoService.obtenerCarritoDeUsuarioActivo(usuario);
+
+            if(carrito == null) {
+                carrito = new Carrito(usuario);
+                carritoService.guardarCarrito(carrito);
+            }
+
+            session.setAttribute("carrito", carrito);
+            model.addAttribute("carrito", carrito);
+            model.addAttribute("tamano", carritoService.obtenerTamañoCarrito(carrito));
+            model.addAttribute("usuario", usuario);
+        }
+
         return "public/listaProductos"; 
     }
 
@@ -58,30 +89,31 @@ public class ProductoController {
         return usuario.getNombreUsuario(); 
     }
 
-@GetMapping("/{id}")
-public String paginaProducto(@PathVariable Integer id, Model model, HttpSession session) {
-    Producto p = productoService.obtenerProductoPorId(id);
-        List<Producto> productos = productoService.obtenerProductosAleatorios();
-        model.addAttribute("producto", p);
-        model.addAttribute("otrosProductos", productos);
+    @GetMapping("/{id}")
+    public String paginaProducto(@PathVariable Integer id, Model model, HttpSession session) {
+        Producto p = productoService.obtenerProductoPorId(id);
+            List<Producto> productos = productoService.obtenerProductosAleatorios();
+            model.addAttribute("producto", p);
+            model.addAttribute("otrosProductos", productos);
 
-    String nombreUsuario = usuarioService.getNombreUsuario();
-        
-    if(nombreUsuario != null) {
-        Usuario usuario = usuarioService.buscarUsuarioEmail(nombreUsuario);
-        Carrito carrito = carritoService.obtenerCarritoDeUsuarioActivo(usuario);
+        String nombreUsuario = usuarioService.getNombreUsuario();
+            
+        if(nombreUsuario != null) {
+            Usuario usuario = usuarioService.buscarUsuarioEmail(nombreUsuario);
+            Carrito carrito = carritoService.obtenerCarritoDeUsuarioActivo(usuario);
 
-        if(carrito == null) {
-            carrito = new Carrito(usuario);
-            carritoService.guardarCarrito(carrito);
+            if(carrito == null) {
+                carrito = new Carrito(usuario);
+                carritoService.guardarCarrito(carrito);
+            }
+
+            session.setAttribute("carrito", carrito);
+            model.addAttribute("carrito", carrito);
+            model.addAttribute("tamano", carritoService.obtenerTamañoCarrito(carrito));
+            model.addAttribute("usuario", usuario);
         }
 
-        session.setAttribute("carrito", carrito);
-        model.addAttribute("carrito", carrito);
-        model.addAttribute("tamano", carritoService.obtenerTamañoCarrito(carrito));
-        model.addAttribute("usuario", usuario);
+        return "public/detalleProducto";
     }
-
-    return "public/detalleProducto";
-}
+    
 }

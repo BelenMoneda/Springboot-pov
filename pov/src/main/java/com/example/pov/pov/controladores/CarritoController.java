@@ -46,7 +46,13 @@ public class CarritoController {
     // Ver el carrito (usando la sesión)
     @GetMapping
     public String verCarrito(HttpSession session, Model model) {
-        Usuario usuario = usuarioService.buscarUsuarioEmail(usuarioService.getNombreUsuario());
+        String nombreUsuario = usuarioService.getNombreUsuario();
+
+        if (nombreUsuario == null) {
+            return "redirect:/";
+        }
+
+        Usuario usuario = usuarioService.buscarUsuarioEmail(nombreUsuario);
         Carrito carrito = carritoService.obtenerCarritoDeUsuarioActivo(usuario);
 
         model.addAttribute("carrito", carrito);
@@ -73,9 +79,14 @@ public class CarritoController {
         Usuario usuario = usuarioService.buscarUsuarioEmail(nombreUsuario);
         Carrito carrito = carritoService.obtenerCarritoDeUsuarioActivo(usuario);
         Producto producto = productoService.obtenerProductoPorId(id);
-        ItemCarrito item = new ItemCarrito(producto, cantidad);
 
-        carrito.agregarItem(item);
+        if (!carrito.existeItem(id)) {
+            ItemCarrito item = new ItemCarrito(producto, cantidad);
+            carrito.agregarItem(item);
+        } else {
+            carrito.actualizarItemSumar(id, cantidad);
+        }
+
         carritoService.guardarCarrito(carrito);
         return "redirect:" + request.getHeader("referer");
     }
@@ -155,5 +166,4 @@ public class CarritoController {
 
         return "public/pago";
     }
-
 }

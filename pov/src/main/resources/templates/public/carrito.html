@@ -51,8 +51,13 @@
                 </tbody>
             </table>
 
+
+            <div class="text mt-4">
+                <h4>Total de la Compra: $<span th:text="${carrito.calcularTotalCarrito()}">0.00</span></h4>
+            </div> 
+
             <form th:action="@{/carrito/finalizar}" method="get">
-                <button type="submit" class="btn btn-secondary">Relizar pedido</button>
+                <button type="submit" class="btn btn-success" >Relizar pedido</button>
             </form>
             
         </div>

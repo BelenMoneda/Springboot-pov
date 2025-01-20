@@ -10,11 +10,13 @@
 <body>
     <nav th:replace="~{public/layout/header::header}"></nav>
     <div class="container mt-5">
-        <h1 class="text-center">Administrar Productos</h1>
-        <div class="row mt-4">
-            <div class="col-md-6">
-                <h2>Añadir Producto</h2>
-                <form id="addProductForm" th:action="@{/admin/añadir}" method="post">
+        <h1 class="text-center mb-4">Administrar Productos</h1>
+        
+        <div class="row">
+            <!-- Sección: Añadir Producto -->
+            <div class="col-md-6 section-container">
+                <h2 class="section-title">Añadir Producto</h2>
+                <form id="addProductForm" th:action="@{/admin/añadir}" method="post" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="nombreProducto">Nombre del Producto</label>
                         <input type="text" class="form-control" id="nombreProducto" name="nombreProducto" placeholder="Nombre del Producto" required>
@@ -40,19 +42,50 @@
                         <input type="number" class="form-control" id="stock" name="stock" placeholder="Stock" required>
                     </div>
                     <div class="form-group">
-                        <label for="imagen">URL de Imagen</label>
-                        <input type="text" class="form-control" id="imagen" name="imagen" placeholder="URL de Imagen">
+                        <label for="imagen">Subir Imagen</label>
+                        <input type="file" class="form-control" id="imagenFile" name="imagenFile" accept="image/*" required>
                     </div>
-                    <button type="submit" class="btn btn-primary">Añadir</button>
-                </form>                
+                    <input type="hidden" name="imagen" id="imagen" value="hidden" />
+                    <button type="submit" class="btn btn-primary mt-3">Añadir</button>
+                </form>
             </div>
-            <div class="col-md-6">
-                <h2>Lista de Productos</h2>
-                <ul class="list-group" id="productList">
+
+            <!-- Sección: Lista de Productos -->
+            <div class="col-md-6 section-container">
+                <h2 class="section-title">Lista de Productos</h2>
+                <ul class="list-group productos-admin" id="productList">
                     <li th:each="producto : ${productos}" class="list-group-item d-flex justify-content-between align-items-center">
                         <p th:text="${producto.getNombreProducto()}"></p>
                         <form th:action="${'/admin/borrar/' + producto.getIdProducto()}" method="post" class="d-inline">
                             <input type="hidden" name="productId" th:value="${producto.getIdProducto()}" />
+                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sección: Añadir Categoría -->
+            <div class="col-md-6 section-container">
+                <h2 class="section-title">Añadir Categoría</h2>
+                <form id="addCategoryForm" th:action="@{/admin/añadirCategoria}" method="post">
+                    <div class="form-group">
+                        <label for="nombreCategoria">Nombre de la Categoría</label>
+                        <input type="text" class="form-control" id="nombreCategoria" name="nombre" placeholder="Nombre de la Categoría" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Añadir</button>
+                </form>
+            </div>
+
+            <!-- Sección: Lista de Categorías -->
+            <div class="col-md-6 section-container">
+                <h2 class="section-title">Lista de Categorías</h2>
+                <ul class="list-group categorias-admin" id="categoryList">
+                    <li th:each="categoria : ${categorias}" class="list-group-item d-flex justify-content-between align-items-center">
+                        <p th:text="${categoria.getNombreCategoria()}"></p>
+                        <form th:action="${'/admin/borrarCategoria/' + categoria.getIdCategoria()}" method="post" class="d-inline">
+                            <input type="hidden" name="categoryId" th:value="${categoria.getIdCategoria()}" />
                             <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
                         </form>
                     </li>

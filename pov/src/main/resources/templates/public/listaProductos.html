@@ -27,8 +27,12 @@
                        th:value="${param.precioMax}">
             </div>
             <div class="col-md-3">
-                <input type="text" name="categoria" class="form-control" placeholder="Categoría" 
-                       th:value="${param.categoria}">
+                <select name="categoria" class="form-select" th:value="${param.categoria}">
+                    <option value="" disabled selected>Selecciona una categoría</option>
+                    <option th:each="categoria : ${categorias}" th:value="${categoria.nombreCategoria}" 
+                            th:text="${categoria.nombreCategoria}">
+                    </option>
+                </select>
             </div>
             <div class="col-md-2">
                 <button type="submit" class="btn btn-primary w-100">Filtrar</button>

@@ -63,3 +63,29 @@
 .añadir-carrito > * {
     width: 40% !important;
 }
+
+.productos-admin {
+    height: 40%;
+    overflow-y: auto;
+}
+
+.section-container {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #dee2e6;
+    margin-bottom: 20px;
+}
+.section-title {
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+    color: #007bff;
+}
+.form-group {
+    margin-bottom: 15px;
+}
+.list-group {
+    max-height: 500px;
+    overflow-y: auto;
+}

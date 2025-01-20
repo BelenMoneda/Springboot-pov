@@ -72,6 +72,18 @@ public class Carrito {
                 .ifPresent(item -> item.setCantidad(cantidad));
     }
 
+    public void actualizarItemSumar(Integer idProducto, Integer cantidad) {
+        this.items.stream()
+                .filter(item -> item.getProducto().getIdProducto().equals(idProducto))
+                .findFirst()
+                .ifPresent(item -> item.setCantidad(item.getCantidad() + cantidad));
+    }
+
+    public boolean existeItem(Integer idProducto) {
+        return this.items.stream()
+                .anyMatch(item -> item.getProducto().getIdProducto().equals(idProducto));
+    }
+
     // Método para eliminar un producto del carrito
     public void eliminarItem(ItemCarrito item) {
         this.items.remove(item);
@@ -85,6 +97,9 @@ public class Carrito {
 
     // Método para calcular el total del carrito
     public double calcularTotalCarrito() {
+        if (items == null || items.isEmpty()) {
+            return 0.0;
+        }
         return this.items.stream()
                 .mapToDouble(item -> item.getProducto().getPrecioUnitario() * item.getCantidad())
                 .sum();

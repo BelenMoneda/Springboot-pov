@@ -26,6 +26,10 @@ public class Categoria {
         this.nombreCategoria = nombreCategoria;
     }
 
+    public Categoria(String nombreCategoria) {
+        this.nombreCategoria = nombreCategoria;
+    }
+
     public Integer getIdCategoria() {
         return idCategoria;
     }

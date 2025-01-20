@@ -35,7 +35,14 @@ public class CarritoService {
     }
     
     public Carrito obtenerCarritoDeUsuarioActivo(Usuario usuario) {
-        return carritoRepository.findByUsuarioAndEstado(usuario, true).orElse(null);
+        Carrito carrito = carritoRepository.findByUsuarioAndEstado(usuario, true).orElse(null);
+
+        if (carrito == null) {
+            carrito = new Carrito(usuario);
+            carritoRepository.save(carrito);
+        }
+        
+        return carrito;
     }
 
     public Carrito guardarCarrito(Carrito carrito) {
